@@ -61,6 +61,10 @@ class ImageActivity : AppCompatActivity() {
             .withSelectionPredicate(selectionPredicate)
             .build()
 
+        if (savedInstanceState != null) {
+            selectionTracker.onRestoreInstanceState(savedInstanceState)
+        }
+
         val imageAdapter = ImageAdapter(selectionTracker)
         recyclerView.apply { adapter = imageAdapter }
         selectionTracker.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
@@ -76,5 +80,10 @@ class ImageActivity : AppCompatActivity() {
 
         val imageRepository = ImageRepository()
         imageAdapter.submitList(imageRepository.getImage())
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        selectionTracker.onSaveInstanceState(outState)
     }
 }
